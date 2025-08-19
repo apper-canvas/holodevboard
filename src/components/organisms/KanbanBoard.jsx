@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import KanbanColumn from "@/components/organisms/KanbanColumn";
 import TaskModal from "@/components/organisms/TaskModal";
 import Loading from "@/components/ui/Loading";
+import ColumnModal from "@/components/organisms/ColumnModal";
 import Error from "@/components/ui/Error";
 import { taskService } from "@/services/api/taskService";
 import { columnService } from "@/services/api/columnService";
@@ -13,9 +13,9 @@ const KanbanBoard = ({ boardId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [draggedTask, setDraggedTask] = useState(null);
-  const [showTaskModal, setShowTaskModal] = useState(false);
+const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
-
+  const [showColumnModal, setShowColumnModal] = useState(false);
 const loadData = async () => {
     if (!boardId) return;
     
@@ -73,10 +73,8 @@ const loadData = async () => {
         )
       );
 
-      const targetColumn = columns.find(col => col.id === targetColumnId);
-      toast.success(`Task moved to ${targetColumn?.title || "column"}`);
+const targetColumn = columns.find(col => col.id === targetColumnId);
     } catch (err) {
-      toast.error("Failed to move task");
       console.error("Error moving task:", err);
     } finally {
       setDraggedTask(null);
@@ -87,10 +85,8 @@ const loadData = async () => {
     try {
       const newTask = await taskService.create(taskData);
       setTasks(prevTasks => [...prevTasks, newTask]);
-      setShowTaskModal(false);
-      toast.success("Task created successfully");
+setShowTaskModal(false);
     } catch (err) {
-      toast.error("Failed to create task");
       console.error("Error creating task:", err);
     }
   };
@@ -98,23 +94,21 @@ const loadData = async () => {
   const handleDeleteTask = async (taskId) => {
     try {
       await taskService.delete(taskId);
-      setTasks(prevTasks => prevTasks.filter(task => task.Id !== taskId));
-      toast.success("Task deleted successfully");
+setTasks(prevTasks => prevTasks.filter(task => task.Id !== taskId));
     } catch (err) {
-      toast.error("Failed to delete task");
       console.error("Error deleting task:", err);
     }
   };
-const handleCreateColumn = async () => {
-  const title = prompt("Enter column title:");
-  if (!title || !title.trim()) return;
-  
+const handleCreateColumn = () => {
+  setShowColumnModal(true);
+};
+
+const handleCreateColumnSubmit = async (columnData) => {
   try {
-    const newColumn = await columnService.create({ title: title.trim() });
+    const newColumn = await columnService.create({ title: columnData.title.trim() });
     setColumns(prevColumns => [...prevColumns, newColumn]);
-    toast.success("Column created successfully");
+    setShowColumnModal(false);
   } catch (err) {
-    toast.error("Failed to create column");
     console.error("Error creating column:", err);
   }
 };
@@ -141,7 +135,7 @@ const getTasksForColumn = (columnId) => {
             Track your development tasks across the workflow
           </p>
         </div>
-        <button
+<button
           onClick={handleCreateColumn}
           className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
         >
@@ -181,8 +175,14 @@ const getTasksForColumn = (columnId) => {
           onSubmit={handleCreateTask}
           defaultColumn={selectedColumn}
           columns={columns}
-        />
+/>
       )}
+
+      <ColumnModal
+        isOpen={showColumnModal}
+        onClose={() => setShowColumnModal(false)}
+        onSubmit={handleCreateColumnSubmit}
+      />
     </div>
   );
 };

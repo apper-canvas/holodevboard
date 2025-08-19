@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'react-toastify/dist/ReactToastify.css';
 
 :root {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -22,35 +21,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Toast styling overrides */
-.Toastify__toast-container {
-  font-size: 14px;
-  z-index: 9999;
-}
-
-.Toastify__toast {
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  min-height: 56px;
-  padding: 16px;
-}
-
-.Toastify__toast--success {
-  background: linear-gradient(135deg, #2DCE89 0%, #11998E 100%);
-}
-
-.Toastify__toast--error {
-  background: linear-gradient(135deg, #F5365C 0%, #EC4C65 100%);
-}
-
-.Toastify__toast--info {
-  background: linear-gradient(135deg, #11CDEF 0%, #06B6D4 100%);
-}
-
-.Toastify__progress-bar {
-  background: rgba(255, 255, 255, 0.3);
-}
 
 /* Drag and drop cursor styles */
 .dragging {
