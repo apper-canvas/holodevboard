@@ -24,13 +24,11 @@ const loadData = async () => {
       setError("");
       
       const [tasksData, columnsData] = await Promise.all([
-        taskService.getAll(),
-        columnService.getAll()
+        taskService.getAll(boardId),
+        columnService.getAll(boardId)
       ]);
       
-      // Filter tasks to only show those belonging to the selected board
-      const boardTasks = tasksData.filter(task => task.boardId === boardId);
-      setTasks(boardTasks);
+      setTasks(tasksData);
       setColumns(columnsData);
     } catch (err) {
       setError("Failed to load board data");

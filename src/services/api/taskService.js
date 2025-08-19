@@ -5,9 +5,22 @@ class TaskService {
     this.tasks = [...tasksData];
   }
 
-  async getAll() {
+async getAll(boardId = null) {
     await this.delay();
-    return [...this.tasks];
+    let filteredTasks = [...this.tasks];
+    
+    if (boardId) {
+      // Associate tasks with boards based on task Id ranges
+      // Tasks 1-6 for board 1, 7-12 for board 2, etc.
+      const tasksPerBoard = 6;
+      const startTaskId = (boardId - 1) * tasksPerBoard + 1;
+      const endTaskId = boardId * tasksPerBoard;
+      filteredTasks = filteredTasks.filter(task => 
+        task.Id >= startTaskId && task.Id <= endTaskId
+      );
+    }
+    
+    return filteredTasks;
   }
 
   async getById(id) {
