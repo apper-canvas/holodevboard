@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import FormField from "@/components/molecules/FormField";
+import LabelSelector from "@/components/molecules/LabelSelector";
 import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
 import TextArea from "@/components/atoms/TextArea";
 import Select from "@/components/atoms/Select";
-import LabelSelector from "@/components/molecules/LabelSelector";
+import { cn } from "@/utils/cn";
 
 const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
   const [formData, setFormData] = useState({
@@ -15,45 +17,60 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
     priority: "medium",
     column: defaultColumn || (columns[0]?.id || "backlog"),
     assignee: "Developer",
+    dueDate: "",
     labels: []
   });
-
-  const [errors, setErrors] = useState({});
+const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.title.trim()) {
       newErrors.title = "Title is required";
     }
+    if (formData.dueDate && new Date(formData.dueDate) < new Date().setHours(0, 0, 0, 0)) {
+      newErrors.dueDate = "Due date cannot be in the past";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) {
+      toast.error("Please fix the form errors");
       return;
     }
 
-const taskData = {
-      ...formData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+    setIsLoading(true);
+    try {
+      const taskData = {
+        ...formData,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    onSubmit(taskData);
-    
-    // Reset form
-setFormData({
-      title: "",
-      description: "",
-      priority: "medium",
-      column: defaultColumn || (columns[0]?.id || "backlog"),
-      assignee: "Developer",
-      labels: []
-    });
-    setErrors({});
+      await onSubmit(taskData);
+      toast.success("Task created successfully");
+      
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        priority: "medium",
+        column: defaultColumn || (columns[0]?.id || "backlog"),
+        assignee: "Developer",
+        dueDate: "",
+        labels: []
+      });
+      setErrors({});
+    } catch (error) {
+      toast.error("Failed to create task");
+      console.error("Error creating task:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 const handleChange = (field, value) => {
@@ -93,7 +110,7 @@ const handleChange = (field, value) => {
           className="relative bg-white rounded-xl shadow-2xl w-full max-w-sm sm:max-w-lg mx-4 max-h-[90vh] flex flex-col dark:bg-gray-800"
         >
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+<h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Create New Task
             </h2>
             <Button
@@ -155,7 +172,18 @@ const handleChange = (field, value) => {
                   </Select>
                 </FormField>
               </div>
-
+<FormField 
+                label="Due Date" 
+                error={errors.dueDate}
+              >
+                <Input
+                  type="date"
+value={formData.dueDate}
+                  onChange={(e) => handleChange("dueDate", e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  className={cn(errors.dueDate && "border-red-500 focus:border-red-500")}
+                />
+              </FormField>
               <FormField label="Assignee">
                 <Select
                   value={formData.assignee}
@@ -178,8 +206,17 @@ const handleChange = (field, value) => {
                   Cancel
                 </Button>
                 <Button type="submit" className="w-full sm:w-auto">
-                  <ApperIcon name="Plus" size={16} className="mr-2" />
-                  Create Task
+{isLoading ? (
+                    <div className="flex items-center">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Creating...
+                    </div>
+                  ) : (
+                    <>
+                      <ApperIcon name="Plus" size={16} className="mr-2" />
+                      Create Task
+                    </>
+                  )}
                 </Button>
               </div>
             </form>

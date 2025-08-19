@@ -2,6 +2,7 @@ import React from "react";
 import ApperIcon from "@/components/ApperIcon";
 import Empty from "@/components/ui/Empty";
 import TaskCard from "@/components/organisms/TaskCard";
+import TaskDetailsModal from "@/components/organisms/TaskDetailsModal";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
 
@@ -15,6 +16,7 @@ const KanbanColumn = ({
   onColumnDragOver,
   onColumnDrop,
   onAddTask,
+  onTaskClick,
   onDeleteTask,
   draggedTask,
   draggedColumn,
@@ -77,10 +79,11 @@ const isDragOver = draggedTask && draggedTask.column !== column.id;
                     onAction={onAddTask}
                     icon="ListTodo" />
             </div> : <div className="space-y-3 task-list max-h-[600px] overflow-y-auto">
-                {tasks.map(task => <TaskCard
+{tasks.map(task => <TaskCard
                     key={task.Id}
                     task={task}
                     onDragStart={onDragStart}
+                    onTaskClick={onTaskClick}
                     onDelete={onDeleteTask}
                     isDragging={draggedTask?.Id === task.Id} />)}
             </div>}

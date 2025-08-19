@@ -6,6 +6,7 @@ import Loading from "@/components/ui/Loading";
 import ColumnModal from "@/components/organisms/ColumnModal";
 import KanbanColumn from "@/components/organisms/KanbanColumn";
 import TaskModal from "@/components/organisms/TaskModal";
+import TaskDetailsModal from "@/components/organisms/TaskDetailsModal";
 import { cn } from "@/utils/cn";
 
 const KanbanBoard = ({ boardId }) => {
@@ -17,7 +18,9 @@ const [draggedTask, setDraggedTask] = useState(null);
   const [draggedColumn, setDraggedColumn] = useState(null);
 const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
-const [showColumnModal, setShowColumnModal] = useState(false);
+  const [showColumnModal, setShowColumnModal] = useState(false);
+  const [showTaskDetailsModal, setShowTaskDetailsModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [isDraggingColumn, setIsDraggingColumn] = useState(false);
 const loadData = async () => {
     if (!boardId) return;
@@ -137,21 +140,40 @@ const targetColumn = columns.find(col => col.id === targetColumnId);
       setDraggedTask(null);
     }
   };
-
-  const handleCreateTask = async (taskData) => {
+const handleCreateTask = async (taskData) => {
     try {
       const newTask = await taskService.create(taskData);
       setTasks(prevTasks => [...prevTasks, newTask]);
-setShowTaskModal(false);
+      setShowTaskModal(false);
     } catch (err) {
       console.error("Error creating task:", err);
     }
   };
 
+  const handleUpdateTask = async (taskId, taskData) => {
+    try {
+      const updatedTask = await taskService.update(taskId, taskData);
+      setTasks(prevTasks => 
+        prevTasks.map(task => 
+          task.Id === taskId ? updatedTask : task
+        )
+      );
+      setShowTaskDetailsModal(false);
+      setSelectedTask(null);
+    } catch (err) {
+      console.error("Error updating task:", err);
+    }
+  };
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    setShowTaskDetailsModal(true);
+  };
+
   const handleDeleteTask = async (taskId) => {
     try {
       await taskService.delete(taskId);
-setTasks(prevTasks => prevTasks.filter(task => task.Id !== taskId));
+      setTasks(prevTasks => prevTasks.filter(task => task.Id !== taskId));
     } catch (err) {
       console.error("Error deleting task:", err);
     }
@@ -207,7 +229,7 @@ return tasks.filter(task => task.column === columnId);
         isDraggingColumn && "select-none"
       )}>
 {columns.map((column) => (
-          <KanbanColumn
+<KanbanColumn
             key={column.id}
             column={column}
             tasks={getTasksForColumn(column.id)}
@@ -221,6 +243,7 @@ return tasks.filter(task => task.column === columnId);
               setSelectedColumn(column.id);
               setShowTaskModal(true);
             }}
+            onTaskClick={handleTaskClick}
             onDeleteTask={handleDeleteTask}
             draggedTask={draggedTask}
             draggedColumn={draggedColumn}
@@ -229,7 +252,7 @@ return tasks.filter(task => task.column === columnId);
         ))}
       </div>
 
-      {showTaskModal && (
+{showTaskModal && (
         <TaskModal
           isOpen={showTaskModal}
           onClose={() => {
@@ -239,7 +262,20 @@ return tasks.filter(task => task.column === columnId);
           onSubmit={handleCreateTask}
           defaultColumn={selectedColumn}
           columns={columns}
-/>
+        />
+      )}
+
+      {showTaskDetailsModal && selectedTask && (
+        <TaskDetailsModal
+          isOpen={showTaskDetailsModal}
+          onClose={() => {
+            setShowTaskDetailsModal(false);
+            setSelectedTask(null);
+          }}
+          onSubmit={handleUpdateTask}
+          task={selectedTask}
+          columns={columns}
+        />
       )}
 
       <ColumnModal
