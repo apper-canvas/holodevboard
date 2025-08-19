@@ -5,9 +5,19 @@ class ColumnService {
     this.columns = [...columnsData];
   }
 
-  async getAll() {
+async getAll(boardId = null) {
     await this.delay();
-    return [...this.columns].sort((a, b) => a.position - b.position);
+    let filteredColumns = [...this.columns];
+    
+    if (boardId) {
+      // Filter columns by boardId, or show columns 1-3 for board 1, 4-6 for board 2, etc.
+      const columnsPerBoard = 3;
+      const startIndex = (boardId - 1) * columnsPerBoard;
+      const endIndex = startIndex + columnsPerBoard;
+      filteredColumns = filteredColumns.slice(startIndex, endIndex);
+    }
+    
+    return filteredColumns.sort((a, b) => a.position - b.position);
   }
 
   async getById(id) {

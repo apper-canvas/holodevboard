@@ -3,7 +3,7 @@ import BoardSelector from "@/components/molecules/BoardSelector";
 import ThemeToggle from "@/components/molecules/ThemeToggle";
 import Button from "@/components/atoms/Button";
 
-const Header = () => {
+const Header = ({ boards = [], selectedBoard = null, onBoardSelect = () => {} }) => {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4 dark:bg-gray-900 dark:border-gray-700">
       <div className="flex items-center justify-between">
@@ -17,7 +17,11 @@ const Header = () => {
             </h1>
           </div>
           
-          <BoardSelector />
+          <BoardSelector 
+            boards={boards}
+            selectedBoard={selectedBoard}
+            onBoardSelect={onBoardSelect}
+          />
         </div>
 
         <div className="flex items-center space-x-4">
