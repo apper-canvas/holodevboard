@@ -55,15 +55,17 @@ return (
                 </Button>
             </div>}
 </div>
-        {task.labels && task.labels.length > 0 && (
-<TaskLabels 
-            labels={useMemo(() => 
-              Array.isArray(task.labels) ? 
-                task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
-                [], [task.labels]
-            )} 
-          />
-        )}
+{(() => {
+          const processedLabels = useMemo(() => 
+            Array.isArray(task.labels) ? 
+              task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
+              [], [task.labels]
+          );
+          
+          return task.labels && task.labels.length > 0 && (
+            <TaskLabels labels={processedLabels} />
+          );
+        })()}
         <h4
             className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
             {task.title}
