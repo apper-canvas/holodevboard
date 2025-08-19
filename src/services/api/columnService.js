@@ -29,10 +29,11 @@ async getAll(boardId = null) {
     return { ...column };
   }
 
-  async create(columnData) {
+async create(columnData) {
     await this.delay();
+    const maxId = Math.max(0, ...this.columns.map(col => parseInt(col.id) || 0));
     const newColumn = {
-      id: columnData.id || `column-${Date.now()}`,
+      id: maxId + 1,
       title: columnData.title,
       position: columnData.position || this.columns.length + 1
     };

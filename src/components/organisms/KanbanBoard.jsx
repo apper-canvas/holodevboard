@@ -105,11 +105,23 @@ const loadData = async () => {
       console.error("Error deleting task:", err);
     }
   };
+const handleCreateColumn = async () => {
+  const title = prompt("Enter column title:");
+  if (!title || !title.trim()) return;
+  
+  try {
+    const newColumn = await columnService.create({ title: title.trim() });
+    setColumns(prevColumns => [...prevColumns, newColumn]);
+    toast.success("Column created successfully");
+  } catch (err) {
+    toast.error("Failed to create column");
+    console.error("Error creating column:", err);
+  }
+};
 
-  const getTasksForColumn = (columnId) => {
-    return tasks.filter(task => task.column === columnId);
-  };
-
+const getTasksForColumn = (columnId) => {
+  return tasks.filter(task => task.column === columnId);
+};
   if (loading) {
     return <Loading message="Loading your board..." />;
   }
@@ -120,7 +132,7 @@ const loadData = async () => {
 
   return (
     <div className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
-      <div className="flex items-center justify-between mb-6">
+<div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Development Board
@@ -129,6 +141,15 @@ const loadData = async () => {
             Track your development tasks across the workflow
           </p>
         </div>
+        <button
+          onClick={handleCreateColumn}
+          className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          Add Column
+        </button>
       </div>
 
       <div className="flex space-x-6 overflow-x-auto kanban-columns pb-6">
