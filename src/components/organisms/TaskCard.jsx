@@ -9,6 +9,12 @@ import { cn } from "@/utils/cn";
 const TaskCard = ({ task, onDragStart, onDelete, onTaskClick, isDragging }) => {
   const [showActions, setShowActions] = useState(false);
 
+  const processedLabels = useMemo(() => 
+    Array.isArray(task.labels) ? 
+      task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
+      [], [task.labels]
+  );
+
   const handleDeleteClick = (e) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this task?")) {
@@ -55,17 +61,9 @@ return (
                 </Button>
             </div>}
 </div>
-{(() => {
-          const processedLabels = useMemo(() => 
-            Array.isArray(task.labels) ? 
-              task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
-              [], [task.labels]
-          );
-          
-          return task.labels && task.labels.length > 0 && (
-            <TaskLabels labels={processedLabels} />
-          );
-        })()}
+{task.labels && task.labels.length > 0 && (
+          <TaskLabels labels={processedLabels} />
+        )}
         <h4
             className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
             {task.title}
