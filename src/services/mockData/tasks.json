@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "title": "Implement user authentication system",
+    "description": "Design and implement a secure user authentication system with JWT tokens, password hashing, and session management.",
+    "priority": "high",
+    "column": "in-progress",
+    "assignee": "Developer",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "title": "Fix responsive layout on mobile",
+    "description": "The navigation menu is not properly collapsing on mobile devices. Need to update media queries and test across different screen sizes.",
+    "priority": "medium",
+    "column": "to-do",
+    "assignee": "Designer",
+    "createdAt": "2024-01-14T14:30:00.000Z",
+    "updatedAt": "2024-01-14T14:30:00.000Z"
+  },
+  {
+    "Id": 3,
+    "title": "Code review: Payment integration",
+    "description": "Review the payment gateway integration code for security vulnerabilities and best practices. Focus on error handling and data validation.",
+    "priority": "high",
+    "column": "code-review",
+    "assignee": "Manager",
+    "createdAt": "2024-01-13T11:15:00.000Z",
+    "updatedAt": "2024-01-13T11:15:00.000Z"
+  },
+  {
+    "Id": 4,
+    "title": "Database optimization",
+    "description": "Optimize database queries for the user dashboard. Add proper indexing and implement query caching where appropriate.",
+    "priority": "medium",
+    "column": "backlog",
+    "assignee": "Developer",
+    "createdAt": "2024-01-12T16:45:00.000Z",
+    "updatedAt": "2024-01-12T16:45:00.000Z"
+  },
+  {
+    "Id": 5,
+    "title": "Setup CI/CD pipeline",
+    "description": "Configure automated testing and deployment pipeline using GitHub Actions. Include code quality checks and automated testing.",
+    "priority": "low",
+    "column": "done",
+    "assignee": "QA",
+    "createdAt": "2024-01-10T08:00:00.000Z",
+    "updatedAt": "2024-01-10T08:00:00.000Z"
+  },
+  {
+    "Id": 6,
+    "title": "Update API documentation",
+    "description": "Update the REST API documentation with new endpoints and authentication requirements. Include example requests and responses.",
+    "priority": "low",
+    "column": "to-do",
+    "assignee": "Developer",
+    "createdAt": "2024-01-11T13:20:00.000Z",
+    "updatedAt": "2024-01-11T13:20:00.000Z"
+  },
+  {
+    "Id": 7,
+    "title": "Implement dark mode toggle",
+    "description": "Add dark mode functionality to the application with persistent user preference storage and smooth theme transitions.",
+    "priority": "medium",
+    "column": "in-progress",
+    "assignee": "Designer",
+    "createdAt": "2024-01-09T10:30:00.000Z",
+    "updatedAt": "2024-01-09T10:30:00.000Z"
+  },
+  {
+    "Id": 8,
+    "title": "Bug: Memory leak in React components",
+    "description": "Investigate and fix memory leak causing performance issues. Check for improper useEffect cleanup and event listener removal.",
+    "priority": "high",
+    "column": "backlog",
+    "assignee": "Developer",
+    "createdAt": "2024-01-16T12:00:00.000Z",
+    "updatedAt": "2024-01-16T12:00:00.000Z"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "backlog",
+    "title": "Backlog",
+    "position": 1
+  },
+  {
+    "id": "to-do",
+    "title": "To Do",
+    "position": 2
+  },
+  {
+    "id": "in-progress",
+    "title": "In Progress",
+    "position": 3
+  },
+  {
+    "id": "code-review",
+    "title": "Code Review",
+    "position": 4
+  },
+  {
+    "id": "done",
+    "title": "Done",
+    "position": 5
+  }
+]
