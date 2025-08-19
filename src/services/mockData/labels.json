@@ -1,0 +1,66 @@
+[
+  {
+    "Id": 1,
+    "name": "Bug",
+    "color": "red",
+    "description": "Issues and defects that need fixing",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "name": "Feature",
+    "color": "blue",
+    "description": "New functionality and enhancements",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 3,
+    "name": "Frontend",
+    "color": "green",
+    "description": "User interface and client-side work",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 4,
+    "name": "Backend",
+    "color": "purple",
+    "description": "Server-side and database work",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 5,
+    "name": "Testing",
+    "color": "yellow",
+    "description": "Quality assurance and testing tasks",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 6,
+    "name": "Documentation",
+    "color": "gray",
+    "description": "Documentation and knowledge sharing",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 7,
+    "name": "Urgent",
+    "color": "orange",
+    "description": "Time-sensitive tasks requiring immediate attention",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "Id": 8,
+    "name": "Research",
+    "color": "indigo",
+    "description": "Investigation and analysis tasks",
+    "createdAt": "2024-01-15T09:00:00.000Z",
+    "updatedAt": "2024-01-15T09:00:00.000Z"
+  }
+]

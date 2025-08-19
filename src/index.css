@@ -136,3 +136,38 @@ body {
 .task-list::-webkit-scrollbar-thumb:hover {
   background-color: rgba(156, 163, 175, 0.5);
 }
+
+/* Label color animations */
+.label-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.label-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Label selection animations */
+.label-selector-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.label-selector-item:hover {
+  transform: scale(1.02);
+}
+
+.label-selector-item:active {
+  transform: scale(0.98);
+}
+
+/* Task card label overflow handling */
+.task-labels {
+  max-height: 60px;
+  overflow: hidden;
+}
+
+.task-labels:hover {
+  overflow: visible;
+  z-index: 10;
+  position: relative;
+}

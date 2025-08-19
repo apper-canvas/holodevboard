@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
+import FormField from "@/components/molecules/FormField";
 import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
 import TextArea from "@/components/atoms/TextArea";
 import Select from "@/components/atoms/Select";
-import FormField from "@/components/molecules/FormField";
+import LabelSelector from "@/components/molecules/LabelSelector";
 
 const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
   const [formData, setFormData] = useState({
@@ -13,7 +14,8 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
     description: "",
     priority: "medium",
     column: defaultColumn || (columns[0]?.id || "backlog"),
-    assignee: "Developer"
+    assignee: "Developer",
+    labels: []
   });
 
   const [errors, setErrors] = useState({});
@@ -34,7 +36,7 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
       return;
     }
 
-    const taskData = {
+const taskData = {
       ...formData,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -43,21 +45,31 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
     onSubmit(taskData);
     
     // Reset form
-    setFormData({
+setFormData({
       title: "",
       description: "",
       priority: "medium",
       column: defaultColumn || (columns[0]?.id || "backlog"),
-      assignee: "Developer"
+      assignee: "Developer",
+      labels: []
     });
     setErrors({});
   };
 
-  const handleChange = (field, value) => {
+const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
     }
+  };
+
+  const handleLabelToggle = (labelId) => {
+    setFormData(prev => ({
+      ...prev,
+      labels: prev.labels.includes(labelId)
+        ? prev.labels.filter(id => id !== labelId)
+        : [...prev.labels, labelId]
+    }));
   };
 
   if (!isOpen) return null;
@@ -143,7 +155,7 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
               </FormField>
             </div>
 
-            <FormField label="Assignee">
+<FormField label="Assignee">
               <Select
                 value={formData.assignee}
                 onChange={(e) => handleChange("assignee", e.target.value)}
@@ -154,6 +166,11 @@ const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
                 <option value="Manager">Project Manager</option>
               </Select>
             </FormField>
+
+            <LabelSelector
+              selectedLabels={formData.labels}
+              onLabelToggle={handleLabelToggle}
+            />
 
             <div className="flex items-center justify-end space-x-3 pt-4">
               <Button type="button" variant="secondary" onClick={onClose}>

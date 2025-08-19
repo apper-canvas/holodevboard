@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { cn } from "@/utils/cn";
-import ApperIcon from "@/components/ApperIcon";
-import Badge from "@/components/atoms/Badge";
-import Button from "@/components/atoms/Button";
+import React, { useState } from "react";
 import { format } from "date-fns";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import { cn } from "@/utils/cn";
 
 const TaskCard = ({ task, onDragStart, onDelete, isDragging }) => {
   const [showActions, setShowActions] = useState(false);
@@ -15,13 +15,27 @@ const TaskCard = ({ task, onDragStart, onDelete, isDragging }) => {
     }
   };
 
-  const getPriorityColor = (priority) => {
+const getPriorityColor = (priority) => {
     switch (priority) {
       case "high": return "high";
       case "medium": return "medium";
       case "low": return "low";
       default: return "default";
     }
+  };
+
+  const getLabelColorClass = (color) => {
+    const colorMap = {
+      red: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700',
+      blue: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700',
+      green: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700',
+      yellow: 'bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-700',
+      purple: 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-700',
+      gray: 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-900/30 dark:text-gray-300 dark:border-gray-700',
+      orange: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:border-orange-700',
+      indigo: 'bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700'
+    };
+    return colorMap[color] || colorMap.gray;
   };
 
   return (
@@ -36,10 +50,12 @@ const TaskCard = ({ task, onDragStart, onDelete, isDragging }) => {
         isDragging && "task-dragging opacity-50"
       )}
     >
-      <div className="flex items-start justify-between mb-3">
-        <Badge variant={getPriorityColor(task.priority)} className="text-xs">
-          {task.priority?.toUpperCase() || "MEDIUM"}
-        </Badge>
+<div className="flex items-start justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <Badge variant={getPriorityColor(task.priority)} className="text-xs">
+            {task.priority?.toUpperCase() || "MEDIUM"}
+          </Badge>
+        </div>
         
         {showActions && (
           <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -54,6 +70,22 @@ const TaskCard = ({ task, onDragStart, onDelete, isDragging }) => {
           </div>
         )}
       </div>
+
+{task.labels && task.labels.length > 0 && (
+        <div className="flex flex-wrap gap-1 mb-3">
+          {task.labels.map((label, index) => (
+            <span
+              key={index}
+              className={cn(
+                "px-2 py-1 text-xs font-medium rounded-full border",
+                getLabelColorClass(label.color)
+              )}
+            >
+              {label.name}
+            </span>
+          ))}
+        </div>
+      )}
 
       <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
         {task.title}
