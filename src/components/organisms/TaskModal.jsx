@@ -85,12 +85,12 @@ const handleChange = (field, value) => {
           onClick={onClose}
         />
         
-        <motion.div
+<motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: "spring", duration: 0.3 }}
-          className="relative bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 dark:bg-gray-800"
+          className="relative bg-white rounded-xl shadow-2xl w-full max-w-sm sm:max-w-lg mx-4 max-h-[90vh] flex flex-col dark:bg-gray-800"
         >
           <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -106,82 +106,84 @@ const handleChange = (field, value) => {
             </Button>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <FormField
-              label="Task Title"
-              required
-              error={errors.title}
-            >
-              <Input
-                placeholder="Enter task title..."
-                value={formData.title}
-                onChange={(e) => handleChange("title", e.target.value)}
-                className={errors.title ? "border-error-500 focus:border-error-500 focus:ring-error-500" : ""}
-              />
-            </FormField>
-
-            <FormField label="Description">
-              <TextArea
-                placeholder="Describe the task..."
-                value={formData.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-                className="min-h-[80px]"
-              />
-            </FormField>
-
-            <div className="grid grid-cols-2 gap-4">
-              <FormField label="Priority">
-                <Select
-                  value={formData.priority}
-                  onChange={(e) => handleChange("priority", e.target.value)}
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </Select>
-              </FormField>
-
-              <FormField label="Column">
-                <Select
-                  value={formData.column}
-                  onChange={(e) => handleChange("column", e.target.value)}
-                >
-                  {columns.map((column) => (
-                    <option key={column.id} value={column.id}>
-                      {column.title}
-                    </option>
-                  ))}
-                </Select>
-              </FormField>
-            </div>
-
-<FormField label="Assignee">
-              <Select
-                value={formData.assignee}
-                onChange={(e) => handleChange("assignee", e.target.value)}
+<div className="flex-1 overflow-y-auto">
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <FormField
+                label="Task Title"
+                required
+                error={errors.title}
               >
-                <option value="Developer">Developer</option>
-                <option value="Designer">Designer</option>
-                <option value="QA">QA Engineer</option>
-                <option value="Manager">Project Manager</option>
-              </Select>
-            </FormField>
+                <Input
+                  placeholder="Enter task title..."
+                  value={formData.title}
+                  onChange={(e) => handleChange("title", e.target.value)}
+                  className={errors.title ? "border-error-500 focus:border-error-500 focus:ring-error-500" : ""}
+                />
+              </FormField>
 
-            <LabelSelector
-              selectedLabels={formData.labels}
-              onLabelToggle={handleLabelToggle}
-            />
+              <FormField label="Description">
+                <TextArea
+                  placeholder="Describe the task..."
+                  value={formData.description}
+                  onChange={(e) => handleChange("description", e.target.value)}
+                  className="min-h-[80px]"
+                />
+              </FormField>
 
-            <div className="flex items-center justify-end space-x-3 pt-4">
-              <Button type="button" variant="secondary" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="submit">
-                <ApperIcon name="Plus" size={16} className="mr-2" />
-                Create Task
-              </Button>
-            </div>
-          </form>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField label="Priority">
+                  <Select
+                    value={formData.priority}
+                    onChange={(e) => handleChange("priority", e.target.value)}
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </Select>
+                </FormField>
+
+                <FormField label="Column">
+                  <Select
+                    value={formData.column}
+                    onChange={(e) => handleChange("column", e.target.value)}
+                  >
+                    {columns.map((column) => (
+                      <option key={column.id} value={column.id}>
+                        {column.title}
+                      </option>
+                    ))}
+                  </Select>
+                </FormField>
+              </div>
+
+              <FormField label="Assignee">
+                <Select
+                  value={formData.assignee}
+                  onChange={(e) => handleChange("assignee", e.target.value)}
+                >
+                  <option value="Developer">Developer</option>
+                  <option value="Designer">Designer</option>
+                  <option value="QA">QA Engineer</option>
+                  <option value="Manager">Project Manager</option>
+                </Select>
+              </FormField>
+
+              <LabelSelector
+                selectedLabels={formData.labels}
+                onLabelToggle={handleLabelToggle}
+              />
+
+              <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4">
+                <Button type="button" variant="secondary" onClick={onClose} className="w-full sm:w-auto">
+                  Cancel
+                </Button>
+                <Button type="submit" className="w-full sm:w-auto">
+                  <ApperIcon name="Plus" size={16} className="mr-2" />
+                  Create Task
+                </Button>
+              </div>
+            </form>
+          </div>
         </motion.div>
       </div>
     </AnimatePresence>
