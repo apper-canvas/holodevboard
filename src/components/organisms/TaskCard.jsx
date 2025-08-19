@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
@@ -56,11 +56,12 @@ return (
             </div>}
 </div>
         {task.labels && task.labels.length > 0 && (
-          <TaskLabels 
-            labels={Array.isArray(task.labels) ? 
-              task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
-              []
-            } 
+<TaskLabels 
+            labels={useMemo(() => 
+              Array.isArray(task.labels) ? 
+                task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
+                [], [task.labels]
+            )} 
           />
         )}
         <h4

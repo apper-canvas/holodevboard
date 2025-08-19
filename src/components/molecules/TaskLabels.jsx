@@ -6,9 +6,9 @@ const TaskLabels = ({ labels = [] }) => {
   const [labelData, setLabelData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     loadLabels();
-  }, [labels]);
+  }, [JSON.stringify(labels.sort())]);
 
   const loadLabels = async () => {
     try {
