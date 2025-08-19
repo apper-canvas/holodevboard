@@ -7,7 +7,7 @@ import Error from "@/components/ui/Error";
 import { taskService } from "@/services/api/taskService";
 import { columnService } from "@/services/api/columnService";
 
-const KanbanBoard = () => {
+const KanbanBoard = ({ boardId }) => {
   const [tasks, setTasks] = useState([]);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,9 @@ const KanbanBoard = () => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
 
-  const loadData = async () => {
+const loadData = async () => {
+    if (!boardId) return;
+    
     try {
       setLoading(true);
       setError("");
@@ -26,7 +28,9 @@ const KanbanBoard = () => {
         columnService.getAll()
       ]);
       
-      setTasks(tasksData);
+      // Filter tasks to only show those belonging to the selected board
+      const boardTasks = tasksData.filter(task => task.boardId === boardId);
+      setTasks(boardTasks);
       setColumns(columnsData);
     } catch (err) {
       setError("Failed to load board data");
@@ -38,7 +42,7 @@ const KanbanBoard = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [boardId]); // Reload when boardId changes
 
   const handleDragStart = (e, task) => {
     setDraggedTask(task);
