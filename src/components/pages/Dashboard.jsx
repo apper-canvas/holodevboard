@@ -1,19 +1,21 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import Header from "@/components/organisms/Header";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { boardService } from "@/services/api/boardService";
+import Loading from "@/components/ui/Loading";
 import KanbanBoard from "@/components/organisms/KanbanBoard";
-import { boardService } from '@/services/api/boardService';
+import Header from "@/components/organisms/Header";
 
 const Dashboard = () => {
   const [boards, setBoards] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     loadBoards();
   }, []);
 
-  const loadBoards = async () => {
+const loadBoards = async () => {
     try {
       setLoading(true);
       const boardsData = await boardService.getAll();
@@ -31,18 +33,10 @@ const Dashboard = () => {
 
   const handleBoardSelect = (board) => {
     setSelectedBoard(board);
-    toast.success(`Switched to ${board.name}`);
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading boards...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -51,8 +45,15 @@ const Dashboard = () => {
         boards={boards}
         selectedBoard={selectedBoard}
         onBoardSelect={handleBoardSelect}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
-      {selectedBoard && <KanbanBoard boardId={selectedBoard.Id} />}
+      {selectedBoard && (
+        <KanbanBoard 
+          boardId={selectedBoard.id} 
+          searchQuery={searchQuery} 
+        />
+      )}
     </div>
   );
 };

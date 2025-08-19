@@ -5,11 +5,11 @@ import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
 import ColumnModal from "@/components/organisms/ColumnModal";
 import KanbanColumn from "@/components/organisms/KanbanColumn";
-import TaskModal from "@/components/organisms/TaskModal";
 import TaskDetailsModal from "@/components/organisms/TaskDetailsModal";
+import TaskModal from "@/components/organisms/TaskModal";
 import { cn } from "@/utils/cn";
 
-const KanbanBoard = ({ boardId }) => {
+const KanbanBoard = ({ boardId, searchQuery = "" }) => {
   const [tasks, setTasks] = useState([]);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -192,7 +192,19 @@ const handleCreateColumnSubmit = async (columnData) => {
   }
 };
 const getTasksForColumn = (columnId) => {
-return tasks.filter(task => task.column === columnId);
+  let filteredTasks = tasks.filter(task => task.column === columnId);
+  
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase().trim();
+    filteredTasks = filteredTasks.filter(task => {
+      // Search in task title
+      const titleMatch = task?.title?.toLowerCase().includes(query);
+      
+      return titleMatch;
+    });
+  }
+  
+  return filteredTasks;
 };
   if (loading) {
     return <Loading message="Loading your board..." />;

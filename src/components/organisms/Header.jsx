@@ -1,9 +1,18 @@
+import { useState } from "react";
 import ApperIcon from "@/components/ApperIcon";
 import BoardSelector from "@/components/molecules/BoardSelector";
 import ThemeToggle from "@/components/molecules/ThemeToggle";
 import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 
-const Header = ({ boards = [], selectedBoard = null, onBoardSelect = () => {} }) => {
+const Header = ({ 
+  boards = [], 
+  selectedBoard = null, 
+  onBoardSelect = () => {},
+  searchQuery = "",
+  onSearchChange = () => {}
+}) => {
+  const [showSearch, setShowSearch] = useState(false);
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4 dark:bg-gray-900 dark:border-gray-700">
       <div className="flex items-center justify-between">
@@ -24,10 +33,39 @@ const Header = ({ boards = [], selectedBoard = null, onBoardSelect = () => {} })
           />
         </div>
 
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon">
-            <ApperIcon name="Search" size={20} />
-          </Button>
+<div className="flex items-center space-x-4">
+          {showSearch ? (
+            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
+              <ApperIcon name="Search" size={16} className="text-gray-500" />
+              <Input
+                type="text"
+                placeholder="Search tasks and labels..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="border-none bg-transparent focus:ring-0 focus:border-none w-64"
+                autoFocus
+              />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setShowSearch(false);
+                  onSearchChange("");
+                }}
+                className="h-6 w-6"
+              >
+                <ApperIcon name="X" size={14} />
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowSearch(true)}
+            >
+              <ApperIcon name="Search" size={20} />
+            </Button>
+          )}
           
           <Button variant="ghost" size="icon">
             <ApperIcon name="Bell" size={20} />
