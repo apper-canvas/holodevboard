@@ -29,30 +29,30 @@ const LabelSelector = ({ selectedLabels = [], onLabelToggle }) => {
     }
   };
 
-  const getLabelColorClass = (color) => {
+const getLabelColorClass = (color) => {
     const colorMap = {
-      red: 'bg-red-100 border-red-300 text-red-700 dark:bg-red-900/20 dark:border-red-600 dark:text-red-400',
-      blue: 'bg-blue-100 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-600 dark:text-blue-400',
-      green: 'bg-green-100 border-green-300 text-green-700 dark:bg-green-900/20 dark:border-green-600 dark:text-green-400',
-      yellow: 'bg-yellow-100 border-yellow-300 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-600 dark:text-yellow-400',
-      purple: 'bg-purple-100 border-purple-300 text-purple-700 dark:bg-purple-900/20 dark:border-purple-600 dark:text-purple-400',
-      gray: 'bg-gray-100 border-gray-300 text-gray-700 dark:bg-gray-900/20 dark:border-gray-600 dark:text-gray-400',
-      orange: 'bg-orange-100 border-orange-300 text-orange-700 dark:bg-orange-900/20 dark:border-orange-600 dark:text-orange-400',
-      indigo: 'bg-indigo-100 border-indigo-300 text-indigo-700 dark:bg-indigo-900/20 dark:border-indigo-600 dark:text-indigo-400'
+      red: 'bg-red-50 border-red-200 text-red-800 hover:bg-red-100 dark:bg-red-950 dark:border-red-800 dark:text-red-200 dark:hover:bg-red-900',
+      blue: 'bg-blue-50 border-blue-200 text-blue-800 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-200 dark:hover:bg-blue-900',
+      green: 'bg-green-50 border-green-200 text-green-800 hover:bg-green-100 dark:bg-green-950 dark:border-green-800 dark:text-green-200 dark:hover:bg-green-900',
+      yellow: 'bg-yellow-50 border-yellow-200 text-yellow-800 hover:bg-yellow-100 dark:bg-yellow-950 dark:border-yellow-800 dark:text-yellow-200 dark:hover:bg-yellow-900',
+      purple: 'bg-purple-50 border-purple-200 text-purple-800 hover:bg-purple-100 dark:bg-purple-950 dark:border-purple-800 dark:text-purple-200 dark:hover:bg-purple-900',
+      gray: 'bg-gray-50 border-gray-200 text-gray-800 hover:bg-gray-100 dark:bg-gray-950 dark:border-gray-800 dark:text-gray-200 dark:hover:bg-gray-900',
+      orange: 'bg-orange-50 border-orange-200 text-orange-800 hover:bg-orange-100 dark:bg-orange-950 dark:border-orange-800 dark:text-orange-200 dark:hover:bg-orange-900',
+      indigo: 'bg-indigo-50 border-indigo-200 text-indigo-800 hover:bg-indigo-100 dark:bg-indigo-950 dark:border-indigo-800 dark:text-indigo-200 dark:hover:bg-indigo-900'
     };
     return colorMap[color] || colorMap.gray;
   };
 
   const getSelectedColorClass = (color) => {
     const colorMap = {
-      red: 'bg-red-500 border-red-500 text-white',
-      blue: 'bg-blue-500 border-blue-500 text-white',
-      green: 'bg-green-500 border-green-500 text-white',
-      yellow: 'bg-yellow-500 border-yellow-500 text-white',
-      purple: 'bg-purple-500 border-purple-500 text-white',
-      gray: 'bg-gray-500 border-gray-500 text-white',
-      orange: 'bg-orange-500 border-orange-500 text-white',
-      indigo: 'bg-indigo-500 border-indigo-500 text-white'
+      red: 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-500/25 hover:bg-red-700 dark:bg-red-500 dark:border-red-500 dark:hover:bg-red-600',
+      blue: 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/25 hover:bg-blue-700 dark:bg-blue-500 dark:border-blue-500 dark:hover:bg-blue-600',
+      green: 'bg-green-600 border-green-600 text-white shadow-lg shadow-green-500/25 hover:bg-green-700 dark:bg-green-500 dark:border-green-500 dark:hover:bg-green-600',
+      yellow: 'bg-yellow-600 border-yellow-600 text-white shadow-lg shadow-yellow-500/25 hover:bg-yellow-700 dark:bg-yellow-500 dark:border-yellow-500 dark:hover:bg-yellow-600',
+      purple: 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-500/25 hover:bg-purple-700 dark:bg-purple-500 dark:border-purple-500 dark:hover:bg-purple-600',
+      gray: 'bg-gray-600 border-gray-600 text-white shadow-lg shadow-gray-500/25 hover:bg-gray-700 dark:bg-gray-500 dark:border-gray-500 dark:hover:bg-gray-600',
+      orange: 'bg-orange-600 border-orange-600 text-white shadow-lg shadow-orange-500/25 hover:bg-orange-700 dark:bg-orange-500 dark:border-orange-500 dark:hover:bg-orange-600',
+      indigo: 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-700 dark:bg-indigo-500 dark:border-indigo-500 dark:hover:bg-indigo-600'
     };
     return colorMap[color] || colorMap.gray;
   };
