@@ -78,6 +78,14 @@ async getAll(boardId = null) {
     return this.tasks.filter(task => task.column === columnId);
   }
 
+async getByLabels(labelNames) {
+    await this.delay();
+    const lowerLabels = labelNames.map(name => name.toLowerCase());
+    return this.tasks.filter(task => 
+      task.labels?.some(label => lowerLabels.includes(label.toLowerCase()))
+    );
+  }
+
   async delay() {
     return new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 200));
   }

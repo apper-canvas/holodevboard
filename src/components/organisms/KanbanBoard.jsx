@@ -200,7 +200,12 @@ const getTasksForColumn = (columnId) => {
       // Search in task title
       const titleMatch = task?.title?.toLowerCase().includes(query);
       
-      return titleMatch;
+      // Search in task labels
+      const labelMatch = task?.labels?.some(label => 
+        label?.toLowerCase().includes(query)
+      );
+      
+      return titleMatch || labelMatch;
     });
   }
   
