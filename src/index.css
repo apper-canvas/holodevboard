@@ -67,6 +67,38 @@ body {
   background-color: rgba(107, 114, 128, 0.7);
 }
 
+/* Column drag and drop styles */
+.column-dragging {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+.column-drag-handle {
+  cursor: grab;
+  user-select: none;
+}
+
+.column-drag-handle:active {
+  cursor: grabbing;
+}
+
+.column-drag-over {
+  transform: scale(1.02);
+  transition: transform 0.2s ease-out;
+}
+
+.column-being-dragged {
+  opacity: 0.5;
+  transform: rotate(1deg);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* Smooth column transitions */
+.kanban-columns .flex-shrink-0 {
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
 /* Animation for drag and drop */
 @keyframes taskDrag {
   from {

@@ -1,21 +1,24 @@
-import { useState, useEffect } from "react";
-import KanbanColumn from "@/components/organisms/KanbanColumn";
-import TaskModal from "@/components/organisms/TaskModal";
-import Loading from "@/components/ui/Loading";
-import ColumnModal from "@/components/organisms/ColumnModal";
-import Error from "@/components/ui/Error";
+import React, { useEffect, useState } from "react";
 import { taskService } from "@/services/api/taskService";
 import { columnService } from "@/services/api/columnService";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import ColumnModal from "@/components/organisms/ColumnModal";
+import KanbanColumn from "@/components/organisms/KanbanColumn";
+import TaskModal from "@/components/organisms/TaskModal";
+import { cn } from "@/utils/cn";
 
 const KanbanBoard = ({ boardId }) => {
   const [tasks, setTasks] = useState([]);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [draggedTask, setDraggedTask] = useState(null);
+const [draggedTask, setDraggedTask] = useState(null);
+  const [draggedColumn, setDraggedColumn] = useState(null);
 const [showTaskModal, setShowTaskModal] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
-  const [showColumnModal, setShowColumnModal] = useState(false);
+const [showColumnModal, setShowColumnModal] = useState(false);
+  const [isDraggingColumn, setIsDraggingColumn] = useState(false);
 const loadData = async () => {
     if (!boardId) return;
     
@@ -41,7 +44,61 @@ const loadData = async () => {
   useEffect(() => {
     loadData();
   }, [boardId]); // Reload when boardId changes
+// Column drag handlers
+  const handleColumnDragStart = (e, column) => {
+    e.dataTransfer.effectAllowed = 'move';
+    setDraggedColumn(column);
+    setIsDraggingColumn(true);
+    e.dataTransfer.setData('text/plain', '');
+  };
 
+  const handleColumnDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleColumnDrop = async (e, targetColumnId) => {
+    e.preventDefault();
+    
+    if (!draggedColumn || draggedColumn.id === targetColumnId) {
+      setDraggedColumn(null);
+      setIsDraggingColumn(false);
+      return;
+    }
+
+    try {
+      const sourceIndex = columns.findIndex(col => col.id === draggedColumn.id);
+      const targetIndex = columns.findIndex(col => col.id === targetColumnId);
+      
+      if (sourceIndex === -1 || targetIndex === -1) return;
+
+      const reorderedColumns = [...columns];
+      const [movedColumn] = reorderedColumns.splice(sourceIndex, 1);
+      reorderedColumns.splice(targetIndex, 0, movedColumn);
+
+      // Update positions
+      const updatedColumns = reorderedColumns.map((col, index) => ({
+        ...col,
+        position: index + 1
+      }));
+
+      setColumns(updatedColumns);
+      
+      // Update positions in service
+      await columnService.updatePositions(updatedColumns.map(col => ({
+        id: col.id,
+        position: col.position
+      })));
+
+    } catch (err) {
+      console.error("Error reordering columns:", err);
+      // Revert on error
+      loadData();
+    } finally {
+      setDraggedColumn(null);
+      setIsDraggingColumn(false);
+    }
+  };
   const handleDragStart = (e, task) => {
     setDraggedTask(task);
     e.dataTransfer.effectAllowed = "move";
@@ -112,9 +169,8 @@ const handleCreateColumnSubmit = async (columnData) => {
     console.error("Error creating column:", err);
   }
 };
-
 const getTasksForColumn = (columnId) => {
-  return tasks.filter(task => task.column === columnId);
+return tasks.filter(task => task.column === columnId);
 };
   if (loading) {
     return <Loading message="Loading your board..." />;
@@ -146,8 +202,11 @@ const getTasksForColumn = (columnId) => {
         </button>
       </div>
 
-      <div className="flex space-x-6 overflow-x-auto kanban-columns pb-6">
-        {columns.map((column) => (
+<div className={cn(
+        "flex space-x-6 overflow-x-auto kanban-columns pb-6",
+        isDraggingColumn && "select-none"
+      )}>
+{columns.map((column) => (
           <KanbanColumn
             key={column.id}
             column={column}
@@ -155,12 +214,17 @@ const getTasksForColumn = (columnId) => {
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
+            onColumnDragStart={handleColumnDragStart}
+            onColumnDragOver={handleColumnDragOver}
+            onColumnDrop={handleColumnDrop}
             onAddTask={() => {
               setSelectedColumn(column.id);
               setShowTaskModal(true);
             }}
             onDeleteTask={handleDeleteTask}
             draggedTask={draggedTask}
+            draggedColumn={draggedColumn}
+            isDraggingColumn={isDraggingColumn}
           />
         ))}
       </div>

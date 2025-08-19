@@ -41,7 +41,7 @@ async create(columnData) {
     return { ...newColumn };
   }
 
-  async update(id, columnData) {
+async update(id, columnData) {
     await this.delay();
     const index = this.columns.findIndex(col => col.id === id);
     if (index === -1) {
@@ -55,6 +55,25 @@ async create(columnData) {
     };
     
     return { ...this.columns[index] };
+  }
+
+  async updatePositions(columnPositions) {
+    await this.delay();
+    
+    columnPositions.forEach(({ id, position }) => {
+      const index = this.columns.findIndex(col => col.id === id);
+      if (index !== -1) {
+        this.columns[index] = {
+          ...this.columns[index],
+          position: position
+        };
+      }
+    });
+    
+    // Sort columns by position
+    this.columns.sort((a, b) => a.position - b.position);
+    
+    return [...this.columns];
   }
 
   async delete(id) {
