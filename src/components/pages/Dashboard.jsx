@@ -62,8 +62,8 @@ return (
         onSearchChange={setSearchQuery}
       />
       {selectedBoard ? (
-        <KanbanBoard 
-          boardId={selectedBoard.Id} 
+<KanbanBoard 
+          boardId={selectedBoard.Name} 
           searchQuery={searchQuery} 
         />
       ) : boards.length === 0 ? (

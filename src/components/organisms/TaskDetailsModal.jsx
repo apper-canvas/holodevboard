@@ -18,7 +18,7 @@ const TaskDetailsModal = ({
   task, 
   columns 
 }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "medium",
@@ -33,15 +33,15 @@ const TaskDetailsModal = ({
 
   // Update form data when task changes
   useEffect(() => {
-    if (task) {
+if (task) {
       setFormData({
-        title: task.title || "",
-        description: task.description || "",
-        priority: task.priority || "medium",
-        column: task.column || "",
-        assignee: task.assignee || "Developer",
+        title: task.title_c || task.title || "",
+        description: task.description_c || task.description || "",
+        priority: task.priority_c || task.priority || "medium",
+        column: task.column_c || task.column || "",
+        assignee: task.assignee_c || task.assignee || "Developer",
         dueDate: task.dueDate || "",
-        labels: task.labels || []
+        labels: task.labels_c ? task.labels_c.split(',') : (task.labels || [])
       });
     }
   }, [task]);
@@ -73,7 +73,7 @@ const TaskDetailsModal = ({
         updatedAt: new Date().toISOString()
       };
 
-      await onSubmit(task.Id, taskData);
+await onSubmit(task.Name, taskData);
       toast.success("Task updated successfully");
       onClose();
     } catch (error) {
@@ -211,9 +211,9 @@ const TaskDetailsModal = ({
                     value={formData.column}
                     onChange={(e) => handleChange("column", e.target.value)}
                   >
-                    {columns.map(column => (
-                      <option key={column.id} value={column.id}>
-                        {column.title}
+{columns.map(column => (
+                      <option key={column.title_c || column.id} value={column.title_c || column.id}>
+                        {column.title_c || column.title}
                       </option>
                     ))}
                   </Select>
@@ -255,12 +255,12 @@ const TaskDetailsModal = ({
                 />
               </FormField>
 
-              {task.createdAt && (
+{(task.created_at_c || task.createdAt) && (
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-                    <span>Created: {format(new Date(task.createdAt), 'MMM d, yyyy')}</span>
-                    {task.updatedAt && (
-                      <span>Updated: {format(new Date(task.updatedAt), 'MMM d, yyyy')}</span>
+                    <span>Created: {format(new Date(task.created_at_c || task.createdAt), 'MMM d, yyyy')}</span>
+                    {(task.updated_at_c || task.updatedAt) && (
+                      <span>Updated: {format(new Date(task.updated_at_c || task.updatedAt), 'MMM d, yyyy')}</span>
                     )}
                   </div>
                 </div>

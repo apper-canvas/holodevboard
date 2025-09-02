@@ -22,9 +22,9 @@ const KanbanColumn = ({
   draggedColumn,
   isDraggingColumn
 }) => {
-const isDragOver = draggedTask && draggedTask.column !== column.id;
-  const isColumnDragOver = draggedColumn && draggedColumn.id !== column.id;
-  const isBeingDragged = draggedColumn?.id === column.id;
+const isDragOver = draggedTask && draggedTask.column_c !== (column.title_c || column.id);
+  const isColumnDragOver = draggedColumn && (draggedColumn.title_c || draggedColumn.id) !== (column.title_c || column.id);
+  const isBeingDragged = (draggedColumn?.title_c || draggedColumn?.id) === (column.title_c || column.id);
   return (
 <div
     className={cn(
@@ -54,7 +54,7 @@ const isDragOver = draggedTask && draggedTask.column !== column.id;
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                        {column.title}
+{column.title_c || column.title || "Untitled"}
                     </h3>
                     <span
                         className="inline-flex items-center justify-center w-6 h-6 text-xs font-medium text-gray-600 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
@@ -80,12 +80,12 @@ const isDragOver = draggedTask && draggedTask.column !== column.id;
                     icon="ListTodo" />
             </div> : <div className="space-y-3 task-list max-h-[600px] overflow-y-auto">
 {tasks.map(task => <TaskCard
-                    key={task.Id}
+                    key={task.Name}
                     task={task}
                     onDragStart={onDragStart}
                     onTaskClick={onTaskClick}
                     onDelete={onDeleteTask}
-                    isDragging={draggedTask?.Id === task.Id} />)}
+                    isDragging={draggedTask?.Name === task.Name} />)}
             </div>}
         </div>
     </div></div>

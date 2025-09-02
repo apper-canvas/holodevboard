@@ -11,11 +11,11 @@ import Select from "@/components/atoms/Select";
 import { cn } from "@/utils/cn";
 
 const TaskModal = ({ isOpen, onClose, onSubmit, defaultColumn, columns }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "medium",
-    column: defaultColumn || (columns[0]?.id || "backlog"),
+    column: defaultColumn || (columns[0]?.title_c || columns[0]?.id || "backlog"),
     assignee: "Developer",
     dueDate: "",
     labels: []
@@ -55,11 +55,11 @@ const handleSubmit = async (e) => {
       toast.success("Task created successfully");
       
       // Reset form
-      setFormData({
+setFormData({
         title: "",
         description: "",
         priority: "medium",
-        column: defaultColumn || (columns[0]?.id || "backlog"),
+        column: defaultColumn || (columns[0]?.title_c || columns[0]?.id || "backlog"),
         assignee: "Developer",
         dueDate: "",
         labels: []
@@ -164,9 +164,9 @@ const handleChange = (field, value) => {
                     value={formData.column}
                     onChange={(e) => handleChange("column", e.target.value)}
                   >
-                    {columns.map((column) => (
-                      <option key={column.id} value={column.id}>
-                        {column.title}
+{columns.map((column) => (
+                      <option key={column.title_c || column.id} value={column.title_c || column.id}>
+                        {column.title_c || column.title}
                       </option>
                     ))}
                   </Select>

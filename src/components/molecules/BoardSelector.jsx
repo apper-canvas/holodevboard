@@ -25,8 +25,8 @@ const BoardSelector = ({ boards = [], selectedBoard = null, onBoardSelect = () =
         className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
       >
         <div 
-          className="w-3 h-3 rounded-full mr-1"
-          style={{ backgroundColor: selectedBoard.color }}
+className="w-3 h-3 rounded-full mr-1"
+          style={{ backgroundColor: selectedBoard.color_c || selectedBoard.color }}
         />
         <ApperIcon name="Folder" size={16} />
         <span>{selectedBoard.name}</span>
@@ -52,27 +52,28 @@ const BoardSelector = ({ boards = [], selectedBoard = null, onBoardSelect = () =
                 Switch Board
               </div>
               {boards.map((board) => (
-                <button
-                  key={board.Id}
+<button
+                  key={board.Name}
                   onClick={() => handleBoardSelect(board)}
                   className={cn(
                     "w-full flex items-center px-4 py-3 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
                     board.Id === selectedBoard.Id && "bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400"
                   )}
                 >
-                  <div 
+<div 
                     className="w-3 h-3 rounded-full mr-3"
-                    style={{ backgroundColor: board.color }}
+                    style={{ backgroundColor: board.color_c || board.color }}
                   />
                   <div className="flex-1">
                     <div className="font-medium">{board.name}</div>
-                    {board.description && (
+<div className="font-medium">{board.name_c || board.name}</div>
+                    {(board.description_c || board.description) && (
                       <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {board.description}
+                        {board.description_c || board.description}
                       </div>
                     )}
                   </div>
-                  {board.Id === selectedBoard.Id && (
+{board.Name === selectedBoard.Name && (
                     <ApperIcon name="Check" size={16} className="ml-2" />
                   )}
                 </button>

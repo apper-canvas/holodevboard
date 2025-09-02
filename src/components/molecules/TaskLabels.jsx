@@ -10,11 +10,15 @@ useEffect(() => {
     loadLabels();
   }, [JSON.stringify(labels.sort())]);
 
-  const loadLabels = async () => {
+const loadLabels = async () => {
     try {
       setLoading(true);
       const allLabels = await labelService.getAll();
-      const taskLabels = allLabels.filter(label => labels.includes(label.Id));
+      const taskLabels = allLabels.filter(label => 
+        labels.includes(label.Name) || 
+        labels.includes(label.name_c) ||
+        (typeof label.name_c === 'string' && labels.includes(label.name_c.toLowerCase()))
+      );
       setLabelData(taskLabels);
     } catch (err) {
       console.error('Failed to load label data:', err);
@@ -50,14 +54,14 @@ useEffect(() => {
     <div className="flex flex-wrap gap-1 mb-2">
       {visibleLabels.map((label) => (
         <span
-          key={label.Id}
+key={label.Name}
           className={cn(
             "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border transition-all duration-200 label-item",
-            getLabelColorClass(label.color)
+            getLabelColorClass(label.color_c || label.color)
           )}
-          title={label.description}
+          title={label.description_c || label.description}
         >
-          {label.name}
+          {label.name_c || label.name}
         </span>
       ))}
       {remainingCount > 0 && (

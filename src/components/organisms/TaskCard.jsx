@@ -10,15 +10,15 @@ const TaskCard = ({ task, onDragStart, onDelete, onTaskClick, isDragging }) => {
   const [showActions, setShowActions] = useState(false);
 
   const processedLabels = useMemo(() => 
-    Array.isArray(task.labels) ? 
-      task.labels.map(label => typeof label === 'object' ? label.Id : label) : 
-      [], [task.labels]
+Array.isArray(task.labels) ? 
+      task.labels.map(label => typeof label === 'object' ? label.Name : label) : 
+      (task.labels_c ? task.labels_c.split(',').map(l => l.trim()) : []), [task.labels, task.labels_c]
   );
 
-  const handleDeleteClick = (e) => {
+const handleDeleteClick = (e) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this task?")) {
-      onDelete(task.Id);
+      onDelete(task.Name);
     }
   };
 
@@ -46,8 +46,8 @@ return (
         )}>
         <div className="flex items-start justify-between mb-3">
             <div className="flex items-center space-x-2">
-                <Badge variant={getPriorityColor(task.priority)} className="text-xs">
-                    {task.priority?.toUpperCase() || "MEDIUM"}
+<Badge variant={getPriorityColor(task.priority_c || task.priority)} className="text-xs">
+                    {(task.priority_c || task.priority)?.toUpperCase() || "MEDIUM"}
                 </Badge>
             </div>
             {showActions && <div
@@ -65,26 +65,26 @@ return (
           <TaskLabels labels={processedLabels} />
         )}
         <h4
-            className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
-            {task.title}
+className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
+            {task.title_c || task.title || "Untitled Task"}
         </h4>
-        {task.description && <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
-            {task.description}
+{(task.description_c || task.description) && <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3">
+            {task.description_c || task.description}
         </p>}
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
                 <div
                     className="w-6 h-6 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
                     <span className="text-xs font-medium text-white">
-                        {task.assignee?.charAt(0) || "U"}
+{(task.assignee_c || task.assignee)?.charAt(0) || "U"}
                     </span>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {task.assignee || "Unassigned"}
+<span className="text-xs text-gray-500 dark:text-gray-400">
+                    {task.assignee_c || task.assignee || "Unassigned"}
                 </span>
             </div>
-            {task.createdAt && <span className="text-xs text-gray-400 dark:text-gray-500">
-                {format(new Date(task.createdAt), "MMM d")}
+{(task.created_at_c || task.createdAt) && <span className="text-xs text-gray-400 dark:text-gray-500">
+                {format(new Date(task.created_at_c || task.createdAt), "MMM d")}
             </span>}
         </div>
         <div

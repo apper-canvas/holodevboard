@@ -78,8 +78,8 @@ const getLabelColorClass = (color) => {
   return (
     <FormField label="Labels">
       <div className="grid grid-cols-2 gap-2">
-        {labels.map((label) => {
-          const isSelected = selectedLabels.includes(label.Id);
+{labels.map((label) => {
+          const isSelected = selectedLabels.includes(label.Name) || selectedLabels.includes(label.name_c);
           return (
             <label
               key={label.Id}
@@ -93,7 +93,7 @@ const getLabelColorClass = (color) => {
               <input
                 type="checkbox"
                 checked={isSelected}
-                onChange={() => onLabelToggle(label.Id)}
+onChange={() => onLabelToggle(label.Name)}
                 className="sr-only"
               />
               <div className={cn(
@@ -105,7 +105,7 @@ const getLabelColorClass = (color) => {
                 )}
               </div>
               <span className="text-sm font-medium truncate">
-                {label.name}
+{label.name_c || label.name}
               </span>
             </label>
           );

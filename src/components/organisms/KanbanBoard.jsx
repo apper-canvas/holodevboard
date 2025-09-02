@@ -70,7 +70,7 @@ const loadData = async () => {
     }
 
     try {
-      const sourceIndex = columns.findIndex(col => col.id === draggedColumn.id);
+const sourceIndex = columns.findIndex(col => (col.title_c || col.id) === (draggedColumn.title_c || draggedColumn.id));
       const targetIndex = columns.findIndex(col => col.id === targetColumnId);
       
       if (sourceIndex === -1 || targetIndex === -1) return;
@@ -80,17 +80,18 @@ const loadData = async () => {
       reorderedColumns.splice(targetIndex, 0, movedColumn);
 
       // Update positions
-      const updatedColumns = reorderedColumns.map((col, index) => ({
+const updatedColumns = reorderedColumns.map((col, index) => ({
         ...col,
+        position_c: index + 1,
         position: index + 1
       }));
 
       setColumns(updatedColumns);
       
-      // Update positions in service
+// Update positions in service
       await columnService.updatePositions(updatedColumns.map(col => ({
-        id: col.id,
-        position: col.position
+        id: col.title_c || col.id,
+        position: col.position_c || col.position
       })));
 
     } catch (err) {
@@ -116,24 +117,24 @@ const loadData = async () => {
   const handleDrop = async (e, targetColumnId) => {
     e.preventDefault();
     
-    if (!draggedTask || draggedTask.column === targetColumnId) {
+if (!draggedTask || (draggedTask.column_c || draggedTask.column) === targetColumnId) {
       setDraggedTask(null);
       return;
     }
 
     try {
-      const updatedTask = { ...draggedTask, column: targetColumnId };
-      await taskService.update(draggedTask.Id, updatedTask);
+const updatedTask = { ...draggedTask, column: targetColumnId, column_c: targetColumnId };
+      await taskService.update(draggedTask.Name, updatedTask);
       
-      setTasks(prevTasks => 
+setTasks(prevTasks => 
         prevTasks.map(task => 
-          task.Id === draggedTask.Id 
-            ? { ...task, column: targetColumnId }
+          task.Name === draggedTask.Name 
+            ? { ...task, column: targetColumnId, column_c: targetColumnId }
             : task
         )
       );
 
-const targetColumn = columns.find(col => col.id === targetColumnId);
+const targetColumn = columns.find(col => (col.title_c || col.id) === targetColumnId);
     } catch (err) {
       console.error("Error moving task:", err);
     } finally {
@@ -150,12 +151,12 @@ const handleCreateTask = async (taskData) => {
     }
   };
 
-  const handleUpdateTask = async (taskId, taskData) => {
+const handleUpdateTask = async (taskId, taskData) => {
     try {
       const updatedTask = await taskService.update(taskId, taskData);
       setTasks(prevTasks => 
         prevTasks.map(task => 
-          task.Id === taskId ? updatedTask : task
+          task.Name === taskId ? updatedTask : task
         )
       );
       setShowTaskDetailsModal(false);
@@ -192,18 +193,19 @@ const handleCreateColumnSubmit = async (columnData) => {
   }
 };
 const getTasksForColumn = (columnId) => {
-  let filteredTasks = tasks.filter(task => task.column === columnId);
+let filteredTasks = tasks.filter(task => (task.column_c || task.column) === columnId);
   
   if (searchQuery.trim()) {
     const query = searchQuery.toLowerCase().trim();
     filteredTasks = filteredTasks.filter(task => {
       // Search in task title
-      const titleMatch = task?.title?.toLowerCase().includes(query);
+      const titleMatch = (task?.title_c || task?.title || "")?.toLowerCase().includes(query);
       
       // Search in task labels
-      const labelMatch = task?.labels?.some(label => 
-        label?.toLowerCase().includes(query)
-      );
+      const labelMatch = (task?.labels_c || "").toLowerCase().includes(query) ||
+        task?.labels?.some(label => 
+          label?.toLowerCase().includes(query)
+        );
       
       return titleMatch || labelMatch;
     });
@@ -247,9 +249,9 @@ const getTasksForColumn = (columnId) => {
       )}>
 {columns.map((column) => (
 <KanbanColumn
-            key={column.id}
+            key={column.title_c || column.id}
             column={column}
-            tasks={getTasksForColumn(column.id)}
+            tasks={getTasksForColumn(column.title_c || column.id)}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -257,7 +259,7 @@ const getTasksForColumn = (columnId) => {
             onColumnDragOver={handleColumnDragOver}
             onColumnDrop={handleColumnDrop}
             onAddTask={() => {
-              setSelectedColumn(column.id);
+              setSelectedColumn(column.title_c || column.id);
               setShowTaskModal(true);
             }}
             onTaskClick={handleTaskClick}
