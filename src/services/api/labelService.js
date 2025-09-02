@@ -216,4 +216,3 @@ class LabelService {
 }
 
 export const labelService = new LabelService();
-export const labelService = new LabelService();
